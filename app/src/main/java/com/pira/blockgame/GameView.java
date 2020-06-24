@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.TextureView;
@@ -102,6 +103,9 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
                 int collisionTime = 0;
                 int soundIndex = ToneGenerator.TONE_DTMF_0; // 0
 
+                // バイブレーション
+                Vibrator vibrator = (Vibrator)getContext().getSystemService(Context.VIBRATOR_SERVICE);
+
                 while (true) {
                     long startTime = System.currentTimeMillis();
 
@@ -132,10 +136,12 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
                         if ((ballLeft < 0 && mBall.getSpeedX() < 0) || (ballRight >= getWidth() && mBall.getSpeedX() > 0)) {
                             mBall.setSpeedX(-1 * mBall.getSpeedX());
                             tg.startTone(ToneGenerator.TONE_DTMF_0, 10); // 第2引数=再生時間 10[ms]
+                            vibrator.vibrate(3);
                         }
                         if (ballTop < 0) {
                             mBall.setSpeedY(-1 * mBall.getSpeedY());
                             tg.startTone(ToneGenerator.TONE_DTMF_0, 10); // 第2引数=再生時間 10[ms]
+                            vibrator.vibrate(3);
                         }
 
                         // 死亡判定
@@ -200,6 +206,7 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
                             }
                             collisionTime = 10;
                             tg.startTone(soundIndex, 10);
+                            vibrator.vibrate(3);
                         }else if(collisionTime>0){
                             collisionTime--;
                         }
@@ -215,6 +222,7 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
                             }
                             mBall.setSpeedY(ballSpeedY);
                             tg.startTone(ToneGenerator.TONE_DTMF_0, 10); // 第2引数=再生時間 10[ms]
+                            vibrator.vibrate(3);
                         }
 
                         for (DrawableItem item : mItemList) {
