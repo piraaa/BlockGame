@@ -3,10 +3,13 @@ package com.pira.blockgame;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import android.preference.PreferenceManager;
 
 public class ClearActivity extends AppCompatActivity {
     public static final String EXTRA_IS_CLEAR = "com.pira.blockgame.EXTRA_IS_CLEAR";
@@ -44,6 +47,23 @@ public class ClearActivity extends AppCompatActivity {
         }
         textBlockCount.setText(getString(R.string.block_count, blockCount));
         textCleatTime.setText(getString(R.string.time, clearTime/1000, clearTime%1000));
+
+        // スコア
+        TextView textScore = (TextView)findViewById(R.id.textScore);
+        final long score = (blockCount) * clearTime;
+        textScore.setText(getString(R.string.score, score));
+
+        // ハイスコア
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        long highscore = sp.getLong("high_score", 0);
+        if(highscore < score){
+            highscore = score;
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putLong("high_score", highscore);
+            editor.commit();
+        }
+        TextView textHighScore = (TextView)findViewById(R.id.textHighScore);
+        textHighScore.setText(getString(R.string.high_score, highscore));
 
         startButton.setOnClickListener(new View.OnClickListener(){
             @Override
