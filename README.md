@@ -1,2 +1,2 @@
 # BlockGame
-practice app
+高2くらいで作った古のアプリ
